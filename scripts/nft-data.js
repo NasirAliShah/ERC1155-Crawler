@@ -1,25 +1,26 @@
 const { ethers } = require("ethers");
 const { MongoClient } = require("mongodb");
 const ExcelJS = require("exceljs");
+require("dotenv").config();
 
 // Ethereum provider setup
-const ether_url = "https://eth-mainnet.g.alchemy.com/v2/nCgU9Tb7DOgNTu0c1epIqXRpgVyqyzAm"; // Alchemy RPC URL
-const provider = new ethers.JsonRpcProvider(ether_url);
+const RPC_URL = process.env.RPC_URL || "";
+const provider = new ethers.JsonRpcProvider(RPC_URL);
 
 // Contract setup
-const CONTRACT_ADDRESS = "0x7229600B699DD90B8e7bE0575d02DB58F409d2cB"; // Deployed contract address
+const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS || "";
 const ABI = require("../utils/ethles.json"); // Contract ABI
 const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
 
 // MongoDB setup
-const MONGO_URI = "mongodb://localhost:27017"; // MongoDB URI
-const DB_NAME = "ethjets"; // Database name
-const COLLECTION_NAME = "nft_balances"; // Collection name
+const MONGO_URI = process.env.MONGO_URI || "";
+const DB_NAME = process.env.DB_NAME || "";
+const COLLECTION_NAME = process.env.COLLECTION_NAME || "";
 
 // Block range
-const START_BLOCK = 15118180; // First transaction block
-const END_BLOCK = 21541992; // Last transaction block
-const CHUNK_SIZE = 10000; // Number of blocks to process per batch
+const START_BLOCK = process.env.START_BLOCK || 0; // First transaction block
+const END_BLOCK = process.env.END_BLOCK || 0; // Last transaction block
+const CHUNK_SIZE = process.env.CHUNK_SIZE || 0; // Number of blocks to process per batch
 
 async function main() {
   // Connect to MongoDB
